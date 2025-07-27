@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Our Beautiful Moments 📸</title>
+    <!-- Google Fonts - Inter for general text, Great Vibes for headings, Dancing Script for captions -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Great+Vibes&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for modern utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the romantic theme and responsiveness */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            background: linear-gradient(to bottom right, #ffdde1, #ee9ca7); /* Soft pink gradient */
+            font-family: 'Inter', sans-serif; /* Primary font for body text */
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars for floating elements */
+            position: relative; /* Needed for absolute positioning of hearts */
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10; /* Ensure content is above floating hearts */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border-radius: 2rem; /* More rounded corners for a soft look */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Softer, diffused shadow */
+            padding: 3rem; /* Generous padding */
+            max-width: 95%; /* Max width for responsiveness */
+            width: 900px; /* Wider for gallery content */
+            animation: fadeInScale 1.5s ease-out forwards; /* Entry animation for the container */
+            display: flex; /* Use flexbox for content alignment */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive; /* Romantic script font for the main heading */
+            font-size: 4rem; /* Large, impactful font size */
+            color: #d6336c; /* Deep rose color */
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        }
+
+        p {
+            color: #5a5a5a; /* Softer text color */
+            font-size: 1.15rem; /* Slightly larger text for readability */
+            margin-bottom: 2.5rem; /* Space before the gallery */
+            line-height: 1.6; /* Improved line spacing */
+        }
+
+        /* Slider Specific Styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px; /* Max width for the slider itself */
+            height: 400px; /* Fixed height for the slider */
+            overflow: hidden; /* Hide extra images */
+            border-radius: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent background */
+            margin-bottom: 2rem;
+        }
+
+        .slider-inner {
+            display: flex; /* Arrange images in a row */
+            width: 100%; /* Will be adjusted by JS based on number of images */
+            height: 100%;
+            transition: transform 0.5s ease-in-out; /* Smooth sliding transition */
+        }
+
+        .slider-inner img {
+            min-width: 100%; /* Each image takes full width of slider-container */
+            height: 100%;
+            object-fit: contain; /* Ensure image is fully visible within its space */
+            border-radius: 0.75rem; /* Rounded corners for images */
+            /* No individual box-shadow here, as it's on the container */
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(214, 51, 108, 0.7); /* Deep rose, semi-transparent */
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 9999px; /* Pill shape */
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            z-index: 20; /* Above images */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-button:hover {
+            background-color: #d6336c; /* Solid deep rose on hover */
+            transform: translateY(-50%) scale(1.1); /* Slight enlarge on hover */
+        }
+
+        .slider-button.prev {
+            left: 1rem;
+        }
+
+        .slider-button.next {
+            right: 1rem;
+        }
+
+        /* Gemini Caption Section */
+        .caption-section {
+            margin-top: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            min-height: 80px; /* Minimum height to prevent jumping */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .caption-text {
+            font-family: 'Dancing Script', cursive; /* Use Dancing Script for captions */
+            font-size: 1.4rem;
+            color: #5a1a3c;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .generate-caption-btn {
+            background-color: #e056fd; /* Vibrant purple */
+            background-image: linear-gradient(to right, #e056fd 0%, #d6336c 100%); /* Beautiful gradient */
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 9999px; /* Pill-shaped button */
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(224, 86, 253, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .generate-caption-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(224, 86, 253, 0.6);
+            background-image: linear-gradient(to left, #e056fd 0%, #d6336c 100%);
+        }
+
+        .back-link {
+            display: inline-flex; /* Allows icon and text to be aligned */
+            align-items: center;
+            gap: 0.5rem; /* Space between text and icon */
+            margin-top: 2.5rem; /* Space above the back link */
+            color: #d6336c; /* Deep rose color for the link */
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Pill shape */
+            border: 2px solid #d6336c; /* Border matching text color */
+        }
+
+        .back-link:hover {
+            background-color: #d6336c; /* Fill with color on hover */
+            color: white; /* White text on hover */
+            transform: translateY(-3px); /* Subtle lift effect */
+            box-shadow: 0 5px 15px rgba(214, 51, 108, 0.3); /* Soft shadow on hover */
+        }
+
+        /* Floating Hearts Container */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            color: #ff69b4;
+            opacity: 0;
+            animation: floatUp 6s ease-in forwards;
+            pointer-events: none;
+        }
+
+        /* Keyframe animations - Reused for consistency */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+                filter: blur(2px);
+            }
+            20% {
+                opacity: 0.7;
+                filter: blur(0);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+                filter: blur(5px);
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .container {
+                padding: 2rem;
+                width: 90%;
+            }
+            .slider-container {
+                height: 300px; /* Smaller height for mobile */
+                max-width: 100%;
+            }
+            .slider-button {
+                padding: 0.5rem 0.75rem;
+                font-size: 1.2rem;
+            }
+            .caption-text {
+                font-size: 1.2rem;
+            }
+            .generate-caption-btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.5rem;
+            }
+            .heart {
+                font-size: 1.5rem;
+            }
+            .back-link {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .slider-container {
+                height: 250px; /* Even smaller height for small phones */
+            }
+            .slider-button {
+                padding: 0.4rem 0.6rem;
+                font-size: 1rem;
+            }
+            .caption-text {
+                font-size: 1rem;
+            }
+            .generate-caption-btn {
+                font-size: 0.8rem;
+                padding: 0.6rem 1.2rem;
+            }
+            .back-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 💖 Floating Hearts -->
+    <div class="floating-hearts" id="hearts"></div>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1>Our Beautiful Memories ❤️</h1>
+        <p>A collection of our cherished moments, forever in my heart.</p>
+
+        <!-- Image Slider -->
+        <div class="slider-container">
+            <div class="slider-inner" id="sliderInner">
+                <!-- Images will be dynamically loaded here by JavaScript -->
+            </div>
+            <button class="slider-button prev" id="prevBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button class="slider-button next" id="nextBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M16.28 12.28a.75.75 0 0 0 0-1.06l-7.5-7.5a.75.75 0 0 0-1.06 1.06L14.69 12l-6.97 6.97a.75.75 0 1 0 1.06 1.06l7.5-7.5Z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Gemini Caption Section -->
+        <div class="caption-section">
+            <p id="geminiCaption" class="caption-text">Click 'Generate Caption' to get a sweet message for this moment! ✨</p>
+            <button id="generateCaptionBtn" class="generate-caption-btn">
+                Generate Caption ✨
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <path fill-rule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 4.06l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M12 12.75a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 1-1.5 0v-6.75a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M12 21a.75.75 0 0 1-.75-.75V12a.75.75 0 0 1 1.5 0v8.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Back button -->
+        <a href="index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+            </svg>
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Background music -->
+    <audio id="bgMusic" loop>
+        <source src="music/Tumhi Ho Bandhu Full Video Song  Cocktail  Saif Ai Khan, Deepika Padukone & Diana Penty  Pritam.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const heartContainer = document.getElementById('hearts');
+            const backgroundMusic = document.getElementById('bgMusic');
+            const sliderInner = document.getElementById('sliderInner');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const generateCaptionBtn = document.getElementById('generateCaptionBtn');
+            const geminiCaptionElement = document.getElementById('geminiCaption');
+            let musicPlayed = false;
+            let currentIndex = 0;
+
+            // Array of image paths relative to your HTML file
+            // IMPORTANT: Jab aap apni website ko deploy karoge, tab yeh images
+            // 'images/' folder ke andar honi chahiye jahan yeh HTML file hai.
+            const imageUrls = [
+                "images/image_978505.jpg",
+                "images/image_978524.jpg",
+                "images/image_978540.jpg",
+                "images/image_9787e7.jpg",
+                "images/image_9787ee.jpg",
+                "images/image_978808.jpg",
+                "images/image_978844.jpg"
+            ];
+
+            // Function to load gallery images dynamically into the slider
+            function loadSliderImages() {
+                imageUrls.forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = "Kunu and Me - A cherished moment";
+                    // Fallback image in case the actual image doesn't load
+                    img.onerror = function() {
+                        this.src = "https://placehold.co/700x400/cccccc/000000?text=Image+Not+Found"; // Larger placeholder for slider
+                        this.alt = "Image not found";
+                    };
+                    sliderInner.appendChild(img);
+                });
+            }
+
+            // Function to show the current image in the slider
+            function showImage(index) {
+                // Calculate the translation needed to show the current image
+                sliderInner.style.transform = `translateX(${-index * 100}%)`;
+                // Clear previous caption when image changes
+                geminiCaptionElement.innerText = "Click 'Generate Caption' to get a sweet message for this moment! ✨";
+            }
+
+            // Event listener for Previous button
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex === 0) ? imageUrls.length - 1 : currentIndex - 1;
+                showImage(currentIndex);
+            });
+
+            // Event listener for Next button
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex === imageUrls.length - 1) ? 0 : currentIndex + 1;
+                showImage(currentIndex);
+            });
+
+            // Function to create and animate a single heart (reused for consistency)
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerText = '💖';
+                heartContainer.appendChild(heart);
+
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${(Math.random() * 1.5 + 1.5)}rem`;
+                heart.style.animationDuration = `${(Math.random() * 4 + 6)}s`;
+                heart.style.animationDelay = `${Math.random() * 2}s`;
+
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+
+            // Start generating hearts at regular intervals
+            setInterval(createHeart, 300);
+
+            // Load images and show the first one when the DOM is ready
+            loadSliderImages();
+            showImage(currentIndex); // Show the first image on load
+
+            // Play music on the first user interaction anywhere on the document
+            document.addEventListener('click', () => {
+                if (!musicPlayed) {
+                    backgroundMusic.play().catch(error => {
+                        console.log("Music autoplay prevented:", error);
+                    });
+                    musicPlayed = true;
+                }
+            }, { once: true }); // Use { once: true } to ensure it only runs once
+
+            // Gemini API Integration for generating captions
+            generateCaptionBtn.addEventListener('click', async () => {
+                geminiCaptionElement.innerText = "Caption ban raha hai... ✨"; // Loading message
+
+                try {
+                    let chatHistory = [];
+                    // The prompt is general as we can't analyze the image content directly
+                    const prompt = "Generate a very short, sweet, and romantic caption (20-30 words) for a photo of a couple, emphasizing love, cherished moments, and happiness. Make it sound heartfelt and perfect for a special memory.";
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Canvas environment will provide this API key
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const generatedText = result.candidates[0].content.parts[0].text;
+                        geminiCaptionElement.innerText = generatedText;
+                    } else {
+                        geminiCaptionElement.innerText = "Caption nahi ban paaya. Kripya phir se prayas karein!";
+                        console.error("Gemini API response structure unexpected:", result);
+                    }
+                } catch (error) {
+                    console.error("Gemini API call mein error:", error);
+                    geminiCaptionElement.innerText = "Caption banane mein dikkat hui. Network ya API ki samasya.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

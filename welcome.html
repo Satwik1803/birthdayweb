@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Kunu! ❤️</title>
+    <!-- Google Fonts - Inter for general text, and Great Vibes for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for modern utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles to create the romantic theme and enhance responsiveness */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            background: linear-gradient(to bottom right, #ffdde1, #ee9ca7); /* Soft pink gradient */
+            font-family: 'Inter', sans-serif; /* Primary font for body text */
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars for floating elements */
+            position: relative; /* Needed for absolute positioning of hearts */
+        }
+
+        .welcome-container {
+            text-align: center;
+            position: relative;
+            z-index: 10; /* Ensure content is above floating hearts */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border-radius: 2rem; /* More rounded corners for a soft look */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Softer, diffused shadow */
+            padding: 3rem; /* Generous padding */
+            max-width: 90%; /* Max width for responsiveness */
+            width: 500px; /* Fixed width for desktop, adapts on smaller screens */
+            animation: fadeInScale 1.5s ease-out forwards; /* Entry animation for the container */
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive; /* Romantic script font for the main heading */
+            font-size: 4.5rem; /* Larger, more impactful font size */
+            color: #d6336c; /* Deep rose color */
+            margin-bottom: 1rem;
+            line-height: 1; /* Adjust line height for better appearance */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        }
+
+        p {
+            color: #5a5a5a; /* Softer text color */
+            font-size: 1.25rem; /* Slightly larger text for readability */
+            margin-bottom: 2.5rem; /* More space before the button */
+            line-height: 1.6; /* Improved line spacing */
+        }
+
+        .enter-btn {
+            background-color: #e056fd; /* Vibrant purple */
+            background-image: linear-gradient(to right, #e056fd 0%, #d6336c 100%); /* Beautiful gradient */
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 9999px; /* Pill-shaped button */
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(224, 86, 253, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(224, 86, 253, 0.6);
+            background-image: linear-gradient(to left, #e056fd 0%, #d6336c 100%);
+        }
+
+        /* Floating Hearts Container */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            color: #ff69b4;
+            opacity: 0;
+            animation: floatUp 6s ease-in forwards;
+            pointer-events: none;
+        }
+
+        /* Gemini Message Modal Styles */
+        .gemini-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .gemini-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gemini-modal-content {
+            background-color: #fff;
+            padding: 2.5rem;
+            border-radius: 1.5rem; /* More rounded */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .gemini-modal-overlay.active .gemini-modal-content {
+            transform: scale(1);
+        }
+
+        .gemini-modal-content h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem; /* Larger heading */
+            color: #d6336c;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .gemini-modal-content p {
+            font-size: 1.1rem;
+            color: #4a4a4a;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        /* Keyframe animations */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+                filter: blur(2px);
+            }
+            20% {
+                opacity: 0.7;
+                filter: blur(0);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+                filter: blur(5px);
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeOutShrink {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .welcome-container {
+                padding: 2rem;
+            }
+            .heart {
+                font-size: 1.5rem;
+            }
+            .gemini-modal-content h2 {
+                font-size: 2.5rem;
+            }
+            .gemini-modal-content p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+            .welcome-container {
+                padding: 1.5rem;
+            }
+            .enter-btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+            .gemini-modal-content h2 {
+                font-size: 2rem;
+            }
+            .gemini-modal-content p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Container -->
+    <div class="floating-hearts" id="hearts"></div>
+
+    <div class="welcome-container">
+        <h1>My Dearest Kunu,</h1>
+        <p>A little surprise, just for you, on your special day. Every moment with you is a gift, and this website is a small token of my endless love. Press the button to unlock your birthday magic!</p>
+        <button id="enterButton" class="enter-btn">
+            Enter My Heart
+            <!-- Heart icon using SVG for better styling and consistency -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <path d="M11.645 20.917 3.033 12.28a1.5 1.5 0 0 1-.096-1.603l2.32-3.753A1.5 1.5 0 0 1 6.848 6h6.065a1.5 1.5 0 0 1 1.028.404l3.765 3.272a1.5 1.5 0 0 1 .536 1.102V18a2 2 0 0 1-2 2H6.75a.75.75 0 0 0 0 1.5h.75A2.25 2.25 0 0 0 11.25 18v.417ZM13.5 6h-3c-1.046 0-1.78.807-2.138 1.5H7.5a.75.75 0 0 0 0 1.5h.379a2.25 2.25 0 0 1-.413 2.198l-.082.092L4.653 14.5H18V11.75a.75.75 0 0 0-.22-.53L14.53 8.22A2.25 2.25 0 0 0 13.5 6Z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Background Music - Autoplay is restricted by browsers, so it will play on user interaction -->
+    <audio id="backgroundMusic" loop>
+        <source src="music/Tumhi Ho Bandhu Full Video Song  Cocktail  Saif Ai Khan, Deepika Padukone & Diana Penty  Pritam.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Gemini Message Modal -->
+    <div id="geminiMessageOverlay" class="gemini-modal-overlay">
+        <div class="gemini-modal-content">
+            <h2 class="text-pink-600">✨ Birthday Magic! ✨</h2>
+            <p id="geminiMessage" class="text-gray-700"></p>
+            <button id="closeGeminiMessage" class="enter-btn mt-4">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const enterButton = document.getElementById('enterButton');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const heartContainer = document.getElementById('hearts');
+            const welcomeContainer = document.querySelector('.welcome-container');
+            const geminiMessageOverlay = document.getElementById('geminiMessageOverlay');
+            const geminiMessageElement = document.getElementById('geminiMessage');
+            const closeGeminiMessageButton = document.getElementById('closeGeminiMessage');
+
+            // Function to create and animate a single heart
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = '💖'; // Using emoji, can be replaced with SVG
+                heartContainer.appendChild(heart);
+
+                // Randomize position, size, and animation duration for a natural look
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${(Math.random() * 1.5 + 1.5)}rem`; // Hearts from 1.5rem to 3rem
+                heart.style.animationDuration = `${(Math.random() * 4 + 6)}s`; // Duration from 6s to 10s
+                heart.style.animationDelay = `${Math.random() * 2}s`; // Staggered start times
+
+                // Remove heart after its animation completes to keep the DOM clean
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+
+            // Start generating hearts at regular intervals
+            let heartGenerationInterval;
+            function startHeartAnimation() {
+                heartGenerationInterval = setInterval(createHeart, 300); // Create a heart every 300ms
+            }
+
+            // Stop generating hearts (e.g., after the user enters)
+            function stopHeartAnimation() {
+                clearInterval(heartGenerationInterval);
+            }
+
+            // Start the heart animation as soon as the page loads
+            startHeartAnimation();
+
+            // Event listener for the "Enter My Heart" button click
+            enterButton.addEventListener('click', async () => {
+                // Attempt to play background music. Browsers require user interaction.
+                backgroundMusic.play().catch(error => {
+                    console.log("Music autoplay prevented:", error);
+                });
+
+                // Apply a fade-out and shrink animation to the welcome container
+                welcomeContainer.style.animation = 'fadeOutShrink 0.8s ease-in forwards';
+
+                setTimeout(async () => {
+                    welcomeContainer.classList.add('hidden'); // Hide it completely
+
+                    // Show Gemini message modal
+                    geminiMessageOverlay.classList.add('active');
+                    geminiMessageElement.innerText = "Kunu ke liye ek khaas sandesh ban raha hai... ✨"; // Loading message
+                    closeGeminiMessageButton.classList.add('hidden'); // Hide button during generation
+
+                    try {
+                        let chatHistory = [];
+                        const prompt = "Generate a very short, sweet, and romantic birthday blessing or a 'lucky charm' message (20-30 words) for a girlfriend named Kunu, emphasizing love, happiness, and future together. Make it sound magical and heartfelt, like a birthday wish from her boyfriend.";
+                        chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Canvas environment will provide this API key
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const generatedText = result.candidates[0].content.parts[0].text;
+                            geminiMessageElement.innerText = generatedText;
+                        } else {
+                            geminiMessageElement.innerText = "Abhi koi khaas sandesh nahi ban paaya. Kripya phir se prayas karein!";
+                            console.error("Gemini API response structure unexpected:", result);
+                        }
+                    } catch (error) {
+                        console.error("Gemini API call mein error:", error);
+                        geminiMessageElement.innerText = "Sandesh banane mein dikkat hui. Network ya API ki samasya.";
+                    } finally {
+                        closeGeminiMessageButton.classList.remove('hidden'); // Show button after generation
+                    }
+
+                }, 700); // Delay to match fadeOutShrink animation
+            });
+
+            // Event listener for the "Continue" button on the Gemini message modal
+            closeGeminiMessageButton.addEventListener('click', () => {
+                geminiMessageOverlay.classList.remove('active'); // Hide the modal
+                window.location.href = 'index.html'; // This will work after deployment
+                stopHeartAnimation(); // Stop hearts once the user "enters"
+            });
+        });
+    </script>
+</body>
+</html>

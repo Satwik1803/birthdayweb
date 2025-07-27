@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Love Quotes 💌</title>
+    <!-- Google Fonts - Inter for general text, Great Vibes for headings, Dancing Script for quotes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Great+Vibes&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for modern utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the romantic theme and responsiveness */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            background: linear-gradient(to bottom right, #ffdde1, #ee9ca7); /* Soft pink gradient */
+            font-family: 'Inter', sans-serif; /* Primary font for body text */
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars for floating elements */
+            position: relative; /* Needed for absolute positioning of hearts */
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10; /* Ensure content is above floating hearts */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border-radius: 2rem; /* More rounded corners for a soft look */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Softer, diffused shadow */
+            padding: 3rem; /* Generous padding */
+            max-width: 90%; /* Max width for responsiveness */
+            width: 700px; /* Optimal width for content */
+            animation: fadeInScale 1.5s ease-out forwards; /* Entry animation for the container */
+            display: flex; /* Use flexbox for content alignment */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive; /* Romantic script font for the main heading */
+            font-size: 4rem; /* Large, impactful font size */
+            color: #d6336c; /* Deep rose color */
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        }
+
+        p {
+            color: #5a5a5a; /* Softer text color */
+            font-size: 1.15rem; /* Slightly larger text for readability */
+            margin-bottom: 2.5rem; /* Space before the quotes container */
+            line-height: 1.6; /* Improved line spacing */
+        }
+
+        .quotes-container {
+            max-width: 600px; /* Adjusted max-width for better flow */
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7); /* Slightly more transparent */
+            padding: 2.5rem; /* Adjusted padding */
+            border-radius: 1.5rem; /* Consistent rounded corners */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
+            margin-bottom: 2rem; /* Space before buttons */
+            min-height: 150px; /* Ensure a minimum height for quotes */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quote {
+            font-family: 'Dancing Script', cursive; /* Use Dancing Script for quotes too */
+            font-size: 1.8rem; /* Larger font for quotes */
+            font-style: italic;
+            margin: 1rem 0; /* Adjusted margin */
+            color: #b72a5a; /* Deep rose color */
+            position: relative;
+            text-align: center;
+            line-height: 1.5;
+            transition: opacity 0.5s ease; /* Smooth transition for quotes */
+        }
+
+        .quote::before {
+            content: '“';
+            font-size: 2.8rem; /* Larger quotation marks */
+            color: #d6336c; /* Matching heading color */
+            vertical-align: top;
+            margin-right: 0.2rem;
+        }
+
+        .quote::after {
+            content: '”';
+            font-size: 2.8rem; /* Larger quotation marks */
+            color: #d6336c; /* Matching heading color */
+            vertical-align: bottom;
+            margin-left: 0.2rem;
+        }
+
+        .generate-quote-btn {
+            background-color: #e056fd; /* Vibrant purple */
+            background-image: linear-gradient(to right, #e056fd 0%, #d6336c 100%); /* Beautiful gradient */
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 9999px; /* Pill-shaped button */
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(224, 86, 253, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem; /* Space below the button */
+        }
+
+        .generate-quote-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(224, 86, 253, 0.6);
+            background-image: linear-gradient(to left, #e056fd 0%, #d6336c 100%);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem; /* Adjusted margin */
+            color: #d6336c;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            border: 2px solid #d6336c;
+        }
+
+        .back-link:hover {
+            background-color: #d6336c;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(214, 51, 108, 0.3);
+        }
+
+        /* Floating Hearts Container */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            color: #ff69b4;
+            opacity: 0;
+            animation: floatUp 6s ease-in forwards;
+            pointer-events: none;
+        }
+
+        /* Keyframe animations - Reused for consistency */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+                filter: blur(2px);
+            }
+            20% {
+                opacity: 0.7;
+                filter: blur(0);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+                filter: blur(5px);
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .container {
+                padding: 2rem;
+                width: 90%;
+            }
+            .quotes-container {
+                padding: 1.5rem;
+            }
+            .quote {
+                font-size: 1.5rem;
+            }
+            .quote::before, .quote::after {
+                font-size: 2.2rem;
+            }
+            .generate-quote-btn {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+            .heart {
+                font-size: 1.5rem;
+            }
+            .back-link {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            p {
+                font-size: 0.9rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .quotes-container {
+                padding: 1rem;
+            }
+            .quote {
+                font-size: 1.2rem;
+            }
+            .quote::before, .quote::after {
+                font-size: 1.8rem;
+            }
+            .generate-quote-btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.2rem;
+            }
+            .back-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 💖 Floating Hearts -->
+    <div class="floating-hearts" id="hearts"></div>
+
+    <div class="container">
+        <h1>Our Love Quotes 💕</h1>
+        <p>Every line, a piece of my heart for you. Click the button to discover new messages!</p>
+
+        <div class="quotes-container">
+            <div id="currentQuote" class="quote">You are the reason I believe in love.</div>
+        </div>
+
+        <button id="generateQuoteBtn" class="generate-quote-btn">
+            Generate New Quote
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 4.06l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M12 12.75a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 1-1.5 0v-6.75a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M12 21a.75.75 0 0 1-.75-.75V12a.75.75 0 0 1 1.5 0v8.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <a class="back-link" href="index.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+            </svg>
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Background music -->
+    <audio id="bgMusic" loop>
+        <source src="music/Tumhi Ho Bandhu Full Video Song  Cocktail  Saif Ai Khan, Deepika Padukone & Diana Penty  Pritam.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const heartContainer = document.getElementById('hearts');
+            const backgroundMusic = document.getElementById('bgMusic');
+            const generateQuoteBtn = document.getElementById('generateQuoteBtn');
+            const currentQuoteElement = document.getElementById('currentQuote');
+            let musicPlayed = false;
+
+            // Function to create and animate a single heart (reused for consistency)
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerText = '💖';
+                heartContainer.appendChild(heart);
+
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.fontSize = `${(Math.random() * 1.5 + 1.5)}rem`;
+                heart.style.animationDuration = `${(Math.random() * 4 + 6)}s`;
+                heart.style.animationDelay = `${Math.random() * 2}s`;
+
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
+
+            // Start generating hearts at regular intervals
+            setInterval(createHeart, 300);
+
+            // Play music on the first user interaction anywhere on the document
+            document.addEventListener('click', () => {
+                if (!musicPlayed) {
+                    backgroundMusic.play().catch(error => {
+                        console.log("Music autoplay prevented:", error);
+                    });
+                    musicPlayed = true;
+                }
+            }, { once: true }); // Use { once: true } to ensure it only runs once
+
+            // Function to generate a new quote using Gemini API
+            generateQuoteBtn.addEventListener('click', async () => {
+                currentQuoteElement.style.opacity = '0'; // Fade out current quote
+                currentQuoteElement.innerText = "Generating a sweet message... ✨"; // Loading message
+                currentQuoteElement.style.opacity = '1'; // Fade in loading message
+
+                try {
+                    let chatHistory = [];
+                    const prompt = "Generate a very short, sweet, and romantic love quote (20-30 words) for a girlfriend named Kunu, emphasizing deep affection and happiness. Make it sound poetic and heartfelt, suitable for a special occasion website.";
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Canvas environment will provide this API key
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const generatedText = result.candidates[0].content.parts[0].text;
+                        currentQuoteElement.style.opacity = '0'; // Fade out loading message
+                        setTimeout(() => {
+                            currentQuoteElement.innerText = generatedText;
+                            currentQuoteElement.style.opacity = '1'; // Fade in new quote
+                        }, 300); // Short delay for fade effect
+                    } else {
+                        currentQuoteElement.innerText = "Could not generate a quote. Please try again!";
+                        console.error("Gemini API response structure unexpected:", result);
+                    }
+                } catch (error) {
+                    console.error("Gemini API call error:", error);
+                    currentQuoteElement.innerText = "Failed to generate quote. Network or API issue.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
